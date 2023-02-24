@@ -21,55 +21,124 @@
 				</section>
 				<section>
 					<section>
-						<h2 class="r-fit-text">New</h2>
+						<h2>New</h2>
 					</section>
 					<section>
 						<pre>
 							<code data-trim data-noescape>
 								class Customer {
-									private CartClient $client;
+									private ShoppingCart $cart;
 
 									public function __construct() {
-										$this->client = new CartClient($api_key);
+										$this->cart = new ShoppingCart;
 									}
 
 									public function addToCart($item) {
-										return $this->client->post('add', $item->id);
+										return $this->cart->client->post('add', $item);
+									}
+								}
+							</code>
+						</pre>
+						<pre>
+							<code data-trim data-noescape>
+								class ShoppingCart {
+									public CartClient $client;
+
+									public function __construct() {
+										$this->client = new CartClient;
 									}
 								}
 							</code>
 						</pre>
 					</section>
+					<section>
+						<div class="r-hstack">
+							<div style="height: 400px">
+								<h3>Advantage</h3>
+								<ul>
+									<li>Don't have to think too much</li>
+								</ul>
+							</div>
+							<div style="height: 400px">
+								<h3>Disadvantage</h3>
+								<ul>
+									<li>Hard to test</li>
+									<li>Hard to maintain</li>
+									<li>Tight coupling</li>
+									<li>Should read carefully</li>
+								</ul>
+							</div>
+						</div>
+					</section>
 				</section>
 				<section>
 					<section>
-						<h2 class="r-fit-text">Dependency injection</h2>
+						<h2>Dependency injection</h2>
 					</section>
 					<section>
 						<pre>
 							<code data-trim data-noescape>
 								class Customer {
+									private ShoppingCart $cart;
+
+									public function __construct(ShoppingCart $cart) {
+										$this->cart = $cart;
+									}
+
+									public function addToCart($item) {
+										return $this->cart->client->post('add', $item);
+									}
+								}
+							</code>
+						</pre>
+						<pre>
+							<code data-trim data-noescape>
+								class ShoppingCart {
 									private CartClient $client;
 
 									public function __construct(CartClient $client) {
 										$this->client = $client;
 									}
-
-									public function addToCart($item) {
-										return $this->client->post('add', $item->id);
-									}
 								}
 							</code>
 						</pre>
 					</section>
 					<section>
+						<div class="r-hstack">
+							<div style="height: 400px">
+								<h3>Advantage</h3>
+								<ul>
+									<li>Easy to test</li>
+									<li>Loose coupling</li>
+								</ul>
+							</div>
+							<div style="height: 400px">
+								<h3>Disadvantage</h3>
+								<ul>
+									<li>Hard to debug :)</li>
+									<li>Not really friendly for new developers</li>
+									<li>Should read carefully</li>
+								</ul>
+							</div>
+						</div>
+					</section>
+				</section>
+				<section>
+					<section> 
+						<h2>Law of Demeter</h2>
+					</section>
+					<section>
 						<pre>
 							<code data-trim data-noescape>
 								class Customer {
-									public ShoppingCart $cart;
+									private ShoppingCart $cart;
 
 									public function __construct(ShoppingCart $cart) {
 										$this->cart = $cart;
+									}
+
+									public function addToCart($item) {
+										return $this->cart->add($item);
 									}
 								}
 							</code>
@@ -83,31 +152,40 @@
 										$this->client = $client;
 									}
 
-									public function add(Item $item) {
-										return $this->client->post('add', $item->id);
-									}
-								}
-							</code>
-						</pre>
-						<pre>
-							<code data-trim data-noescape>
-								class CustomerService {
-									private Customer $customer;
-
-									public function __construct(Customer $customer) {
-										$this->customer = $customer;
-									}
-
-									public function addToCart(Item $item) {
-										$this->customer->cart->add($item);
+									public function add($item) {
+										return $this->client->post('add', $item);
 									}
 								}
 							</code>
 						</pre>
 					</section>
+					<section>
+						<div class="r-hstack">
+							<div style="height: 400px">
+								<h3>Advantage</h3>
+								<ul>
+									<li>More easy to test</li>
+									<li>More loose coupling</li>
+									<li>Easy to maintain</li>
+								</ul>
+							</div>
+							<div style="height: 400px">
+								<h3>Disadvantage</h3>
+								<ul>
+									<li>May have to write more code</li>
+									<li>Really not friendly for new developers</li>
+									<li>Increase development time</li>
+									<li>Should read alot</li>
+								</ul>
+							</div>
+						</div>
+					</section>
 				</section>
 				<section>
 					<h1>Just Ask For Things</h1>
+				</section>
+				<section>
+					<h1>Q&A</h1>
 				</section>
 				<section>
 					<h1>Thanks</h1>
