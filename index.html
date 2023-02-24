@@ -16,8 +16,102 @@
 	<body>
 		<div class="reveal">
 			<div class="slides">
-				<section>Slide 1</section>
-				<section>Slide 2</section>
+				<section>
+					<h1>Don't Look For Things<h1>
+				</section>
+				<section>
+					<section>
+						<h2 class="r-fit-text">New</h2>
+					</section>
+					<section>
+						<pre>
+							<code data-trim data-noescape>
+								class Customer {
+									private CartClient $client;
+
+									public function __construct() {
+										$this->client = new CartClient($api_key);
+									}
+
+									public function addToCart($item) {
+										return $this->client->post('add', $item->id);
+									}
+								}
+							</code>
+						</pre>
+					</section>
+				</section>
+				<section>
+					<section>
+						<h2 class="r-fit-text">Dependency injection</h2>
+					</section>
+					<section>
+						<pre>
+							<code data-trim data-noescape>
+								class Customer {
+									private CartClient $client;
+
+									public function __construct(CartClient $client) {
+										$this->client = $client;
+									}
+
+									public function addToCart($item) {
+										return $this->client->post('add', $item->id);
+									}
+								}
+							</code>
+						</pre>
+					</section>
+					<section>
+						<pre>
+							<code data-trim data-noescape>
+								class Customer {
+									public ShoppingCart $cart;
+
+									public function __construct(ShoppingCart $cart) {
+										$this->cart = $cart;
+									}
+								}
+							</code>
+						</pre>
+						<pre>
+							<code data-trim data-noescape>
+								class ShoppingCart {
+									private CartClient $client;
+
+									public function __construct(CartClient $client) {
+										$this->client = $client;
+									}
+
+									public function add(Item $item) {
+										return $this->client->post('add', $item->id);
+									}
+								}
+							</code>
+						</pre>
+						<pre>
+							<code data-trim data-noescape>
+								class CustomerService {
+									private Customer $customer;
+
+									public function __construct(Customer $customer) {
+										$this->customer = $customer;
+									}
+
+									public function addToCart(Item $item) {
+										$this->customer->cart->add($item);
+									}
+								}
+							</code>
+						</pre>
+					</section>
+				</section>
+				<section>
+					<h1>Just Ask For Things</h1>
+				</section>
+				<section>
+					<h1>Thanks</h1>
+				</section>
 			</div>
 		</div>
 
